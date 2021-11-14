@@ -1,1 +1,1 @@
-/root/os/target/riscv64gc-unknown-none-elf/debug/os: /root/os/src/main.rs
+/root/OS_Try/os/target/riscv64gc-unknown-none-elf/debug/os: /root/OS_Try/os/src/console.rs /root/OS_Try/os/src/entry.asm /root/OS_Try/os/src/lang_items.rs /root/OS_Try/os/src/main.rs /root/OS_Try/os/src/sbi.rs
