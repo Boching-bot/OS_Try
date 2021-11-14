@@ -1,15 +1,13 @@
+
 #![no_std]
 #![no_main]
 #![feature(asm)]
 #![feature(global_asm)]
 #![feature(panic_info_message)]
 #![feature(alloc_error_handler)]
-
 extern crate alloc;
-
 #[macro_use]
 extern crate bitflags;
-
 #[macro_use]
 mod console;
 mod lang_items;
@@ -22,10 +20,8 @@ mod task;
 mod timer;
 mod sync;
 mod mm;
-
 global_asm!(include_str!("entry.asm"));
 global_asm!(include_str!("link_app.S"));
-
 fn clear_bss() {
     extern "C" {
         fn sbss();
@@ -38,7 +34,6 @@ fn clear_bss() {
         ).fill(0);
     }
 }
-
 #[no_mangle]
 pub fn rust_main() -> ! {
     clear_bss();
@@ -46,9 +41,13 @@ pub fn rust_main() -> ! {
     mm::init();
     println!("[kernel] back to world!");
     mm::remap_test();
+    task::add_initproc();
+    println!("after initproc!");
     trap::init();
     trap::enable_timer_interrupt();
     timer::set_next_trigger();
-    task::run_first_task();
+    loader::list_apps();
+    task::run_tasks();
     panic!("Unreachable in rust_main!");
 }
+
