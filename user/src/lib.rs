@@ -2,12 +2,10 @@
 #![feature(asm)]
 #![feature(linkage)]
 #![feature(panic_info_message)]
-
 #[macro_use]
 pub mod console;
 mod syscall;
 mod lang_items;
-
 fn clear_bss() {
     extern "C" {
         fn start_bss();
@@ -17,7 +15,6 @@ fn clear_bss() {
         unsafe { (addr as *mut u8).write_volatile(0); }
     });
 }
-
 #[no_mangle]
 #[link_section = ".text.entry"]
 pub extern "C" fn _start() -> ! {
@@ -25,17 +22,13 @@ pub extern "C" fn _start() -> ! {
     exit(main());
     panic!("unreachable after sys_exit!");
 }
-
 #[linkage = "weak"]
 #[no_mangle]
 fn main() -> i32 {
     panic!("Cannot find main!");
 }
-
-
 use syscall::*;
-
 pub fn write(fd: usize, buf: &[u8]) -> isize { sys_write(fd, buf) }
 pub fn exit(exit_code: i32) -> isize { sys_exit(exit_code) }
 pub fn yield_() -> isize { sys_yield() }
-
+pub fn get_time() -> isize { sys_get_time() }
